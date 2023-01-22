@@ -22,7 +22,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $ganga->title }}</h5>
                             <p class="card-text">{{ $ganga->description }}</p>
-                            <p class="card-text display-6">{{ $ganga->price }}€ <del style="font-size: 25px">{{ $ganga->price_sale }}€</del></p>
+                            <p class="card-text display-6">{{ $ganga->price }}€ <del style="font-size: 25px; color: red">{{ $ganga->price_sale }}€</del></p>
                             <a href="{{ route('ganga.show', $ganga->id) }}" class="btn btn-primary">Detalle</a>
                         </div>
                     </div>

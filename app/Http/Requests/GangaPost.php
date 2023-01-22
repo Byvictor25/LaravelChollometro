@@ -32,4 +32,19 @@ class GangaPost extends FormRequest{
             'image' => ['required', \Illuminate\Validation\Rules\File::image()],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'El título es obligatorio',
+            'title.min' => 'El titulo tiene que tener mínimo 8 caracteres',
+            'description.required' => 'La descripción es obligatoria',
+            'description.min' => 'La descripción tiene que tener mínimo 20 caracteres',
+            'url.required' => 'El enlace al chollo es obligatorio',
+            'category.required' => 'Selecciona una categoria',
+            'price.required' => 'El precio es obligatorio',
+            'price_sale.required' => 'El precio de salida es obligatorio',
+            'image.required'  => 'Selecciona una imagen para el chollo'
+        ];
+    }
 }
