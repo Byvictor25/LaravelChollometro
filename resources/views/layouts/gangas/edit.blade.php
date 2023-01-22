@@ -3,24 +3,27 @@
 @section('contenido')
     <div class="row">
         @if($errors->any())
-            <div class="alert alert-danger alert-dismissible" role="alert" aria-label="close">
-                @if ($errors->has('title'))
-                    <div class="text-danger">
-                        {{ $errors->first('title') }}
-                    </div>
-                @endif
-            </div>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            @if ($errors->has('title'))
+                <div class="text-danger">
+                    {{ $errors->first('title') }}
+                </div>
+            @endif
+        </div>
         @endif
+    </div>
+    <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-sm-6 col-md-4 col-lg-4 m-2" id="addGanga">
-            <form action="{{ route('ganga.store') }}" method='POST' enctype="multipart/form-data">
+            <form action="{{ route('ganga.update', $ganga->id) }}" method='POST' enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <fieldset>
-                    <legend class="bg-dark text-white text-center">Añadir Chollo</legend>
+                    <legend class="bg-dark text-white text-center">Editar el Chollo ({{ $ganga->title }})</legend>
                     <div class="form-group">
                         <label for="title">Título:</label>
                         <input type="text" class="form-control" name="title" id="titulo"
-                               value="{!! old('title') !!}">
+                               value="{{ $ganga->title }}">
                         @if ($errors->has('title'))
                             <div class="text-danger">
                                 {{ $errors->first('title') }}
@@ -30,7 +33,7 @@
                     <div class="form-group">
                         <label for="description">Contenido:</label>
                         <textarea class="form-control" name="description" id="content">
-                            {!! old('description') !!}
+                            {{ $ganga->description }}
                         </textarea>
                         @if ($errors->has('description'))
                             <div class="text-danger">
@@ -41,7 +44,7 @@
                     <div class="form-group">
                         <label for="url">Enlace del Chollo:</label>
                         <input type="text" class="form-control" name="url" id="titulo"
-                               value="{!! old('url') !!}">
+                               value="{{ $ganga->url }}">
                         @if ($errors->has('url'))
                             <div class="text-danger">
                                 {{ $errors->first('url') }}
@@ -51,7 +54,7 @@
                     <div class="form-group">
                         <label for="category">Categoría:</label>
                         <select class="form-control" name="category">
-                            <option id="category">--- Selecciona categoría ---</option>
+                            <option id="category" disabled selected>{{ \App\Models\Categoria::findOrFail($ganga->category)->title }}</option>
                             @foreach($categorias as $categoria)
                                 <option id="category" value="{{ $categoria->id }}"> {{ $categoria->title }}</option>
                             @endforeach
@@ -64,7 +67,7 @@
                     </div>
                     <div class="form-group">
                         <label for="price">Precio:</label>
-                        <input type="number" name="price" class="form-control">
+                        <input type="number" name="price" class="form-control" value="{{ $ganga->price }}">
                         @if ($errors->has('price'))
                             <div class="text-danger">
                                 {{ $errors->first('price') }}
@@ -73,7 +76,7 @@
                     </div>
                     <div class="form-group">
                         <label for="price_sale">Precio de salida:</label>
-                        <input type="number" name="price_sale" class="form-control">
+                        <input type="number" name="price_sale" class="form-control" value="{{ $ganga->price_sale }}">
                         @if ($errors->has('price_sale'))
                             <div class="text-danger">
                                 {{ $errors->first('price_sale') }}
@@ -81,7 +84,11 @@
                         @endif
                     </div>
                     <div class="form-group">
-                        Selecciona Imagen: <input name="image" type="file" />
+                        <p>Imagen:
+                            <img src="{{ asset("storage/img/$ganga->id-ganga-severa.jpg") }}" class="mt-2 text-center col-lg-3 col-4" width="50px">
+                        </p>
+                        <label for="image">Selecciona otra Imagen si quieres cambiarla: </label>
+                         <input name="image" type="file" />
                         @if ($errors->has('image'))
                             <div class="text-danger">
                                 {{ $errors->first('image') }}

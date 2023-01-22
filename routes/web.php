@@ -28,3 +28,6 @@ require __DIR__.'/auth.php';
 
 Route::resource('ganga', 'GangaController');
 Route::get('/profile', [\App\Http\Controllers\GangaController::class, 'profile']);
+Route::get('/addLike/{id}', [\App\Http\Controllers\GangaController::class, 'addLike']);
+Route::get('/addDislike/{id}', [\App\Http\Controllers\GangaController::class, 'addDislike']);
+Route::get('/gangasDestacadas', [\App\Http\Controllers\GangaController::class, 'gangasDestacadas']);

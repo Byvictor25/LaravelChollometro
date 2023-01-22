@@ -31,7 +31,6 @@ class GangaFactory extends Factory
             'price' => $this->faker->numberBetween(1000,2000),
             'price_sale' => $this->faker->numberBetween(1000,2000),
             'available' => $this->faker->boolean,
-            'image' => "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-14-pro-model-unselect-gallery-2-202209_GEO_EMEA?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1660753617539",
             'user_id' => User::inRandomOrder()->first()
         ];
     }

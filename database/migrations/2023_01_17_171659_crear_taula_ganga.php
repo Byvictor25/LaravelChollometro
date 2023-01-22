@@ -24,7 +24,6 @@ return new class extends Migration
             $tabla->bigInteger('price_sale')->unsigned();
             $tabla->boolean('available');
             $tabla->bigInteger('user_id')->unsigned()->nullable();
-            $tabla->string('image');
             $tabla->timestamps();
             $tabla->foreign('category')->references('id')->on('categorias');
             $tabla->foreign('user_id')->references('id')->on('users');

@@ -2,16 +2,17 @@
 
 namespace App\Http\Requests;
 
-use Faker\Core\File;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GangaPost extends FormRequest{
+class GangaEdit extends FormRequest
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize(){
+    public function authorize()
+    {
         return true;
     }
 
@@ -29,7 +30,6 @@ class GangaPost extends FormRequest{
             'category' => 'required',
             'price' => 'required|numeric',
             'price_sale' => 'required|numeric',
-            'image' => ['required', \Illuminate\Validation\Rules\File::image()],
         ];
     }
 }

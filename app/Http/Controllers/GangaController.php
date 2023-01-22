@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GangaEdit;
+use App\Http\Requests\GangaPost;
 use App\Models\Categoria;
 use App\Models\Ganga;
 use App\Models\User;
@@ -10,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 
 class GangaController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth',['only' => ['create', 'store', 'edit', 'update', 'destroy', 'addLike', 'addDislike']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,6 +22,11 @@ class GangaController extends Controller
      */
     public function index(){
         $gangas = Ganga::orderBy('title', 'ASC')->paginate(5);
+        return view('layouts/gangas.index', compact("gangas"));
+    }
+
+    public function gangasDestacadas() {
+        $gangas = Ganga::orderBy('likes', 'DESC')->paginate(5);
         return view('layouts/gangas.index', compact("gangas"));
     }
 
@@ -36,7 +46,7 @@ class GangaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
+    public function store(GangaPost $request){
         $ganga = new Ganga();
         $ganga->title = $request->get('title');
         $ganga->description = $request->get('description');
@@ -48,7 +58,9 @@ class GangaController extends Controller
         $ganga->price_sale = $request->get('price_sale');
         $ganga->available = 1;
         $ganga->user_id = Auth::id();
-        move_uploaded_file($_FILES['image']['tmp_name'], "./uploads/{$request->get('image')}");
+        $ganga->save();
+        $imagen_ganga = "$ganga->id-ganga-severa.jpg";
+        $request->file('image')->storeAs('public/img', $imagen_ganga);
         return view('layouts/gangas.detalle', compact("ganga"));
     }
 
@@ -69,9 +81,10 @@ class GangaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id){
+        $ganga = Ganga::findOrFail($id);
+        $categorias = Categoria::get();
+        return view('layouts/gangas.edit', compact("ganga", "categorias"));
     }
 
     /**
@@ -81,9 +94,20 @@ class GangaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(GangaEdit $request, $id){
+        $ganga = Ganga::findOrFail($id);
+        $ganga->title = $request->get('title');
+        $ganga->description = $request->get('description');
+        $ganga->url = $request->get('url');
+        $ganga->category = $request->get('category');
+        $ganga->price = $request->get('price');
+        $ganga->price_sale = $request->get('price_sale');
+        $ganga->save();
+        $imagen_ganga = "$ganga->id-ganga-severa.jpg";
+        if ($request->file('image')) {
+            $request->file('image')->storeAs('public/img', $imagen_ganga);
+        }
+        return view('layouts/gangas.detalle', compact("ganga"));
     }
 
     /**
@@ -92,9 +116,10 @@ class GangaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id){
+        Ganga::findOrFail($id)->delete();
+        $gangas = Ganga::orderBy('title', 'ASC')->paginate(5);
+        return view('layouts/gangas.index', compact("gangas"));
     }
 
     public function profile(){
@@ -108,5 +133,19 @@ class GangaController extends Controller
             }
         }
         return view('layouts/gangas.profile', compact("gangasUser", "user"));
+    }
+
+    public function addLike($idGanga) {
+        $ganga = Ganga::findOrFail($idGanga);
+        $ganga->likes = $ganga->likes + 1;
+        $ganga->save();
+        return view('layouts/gangas.detalle', compact("ganga"));
+    }
+
+    public function addDislike($idGanga) {
+        $ganga = Ganga::findOrFail($idGanga);
+        $ganga->dislikes = $ganga->dislikes + 1;
+        $ganga->save();
+        return view('layouts/gangas.detalle', compact("ganga"));
     }
 }

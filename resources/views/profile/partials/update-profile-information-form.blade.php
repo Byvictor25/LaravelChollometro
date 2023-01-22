@@ -1,4 +1,4 @@
-<section>
+<section class="text-center">
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{ __('Información del Perfil') }}

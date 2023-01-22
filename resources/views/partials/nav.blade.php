@@ -15,7 +15,7 @@
                 <a class="nav-link" href="{{ route("ganga.create") }}">Añadir Chollo</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Chollos Destacades</a>
+                <a class="nav-link" href="/gangasDestacadas">Chollos Destacades</a>
             </li>
         </ul>
         <div class="ms-auto nav-item dropdown text-white me-5">
